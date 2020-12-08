@@ -11,9 +11,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import java.util.*
-
-private const val ARG_CRIME_ID = "crime_id"
+import androidx.navigation.fragment.navArgs
 
 class CrimeFragment : Fragment() {
 
@@ -26,13 +24,17 @@ class CrimeFragment : Fragment() {
         ViewModelProvider(this).get(CrimeDetailViewModel::class.java)
     }
 
+    //nav graph
+    val args: CrimeFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         crime = Crime()
 
-        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        crimeDetailViewModel.loadCrime(crimeId)
+        //nav graph
+        val crimeIdArgs = args.crimeIdArg
+        crimeDetailViewModel.loadCrime(crimeIdArgs)
     }
 
     override fun onCreateView(
@@ -107,18 +109,5 @@ class CrimeFragment : Fragment() {
             jumpDrawablesToCurrentState()
         }
 
-    }
-
-    companion object {
-
-        fun newInstance(crimeId: UUID): CrimeFragment {
-            val args = Bundle().apply {
-                putSerializable(ARG_CRIME_ID, crimeId)
-            }
-
-            return CrimeFragment().apply {
-                arguments = args
-            }
-        }
     }
 }
